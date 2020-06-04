@@ -4,7 +4,7 @@
 
 
 App app;
-
+HHOOK keyboardHook;
 
 
 
@@ -43,7 +43,7 @@ LRESULT CALLBACK LowLevelKeyboardProc(int code, WPARAM wParam, LPARAM lParam)
 			return ret;
 		}
 	}
-	return 0;
+	return CallNextHookEx(keyboardHook, code, wParam, lParam);
 }
 
 void mouse_move_proc()
@@ -72,7 +72,7 @@ WinMain(
 {
 	app.hInstance = hInstance;
 
-	HHOOK keyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, LowLevelKeyboardProc, hInstance, NULL);
+	keyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, LowLevelKeyboardProc, hInstance, NULL);
 
 	thread mouseThread(mouse_move_proc);
 
