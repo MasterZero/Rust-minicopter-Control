@@ -1,12 +1,14 @@
 //{{NO_DEPENDENCIES}}
-// Включаемый файл, созданный в Microsoft Visual C++.
-// Используется rust_controls.rc
+// Microsoft Visual C++ generated include file.
+// Used by rust_controls.rc
 //
 #define IDD_DIALOG_MAIN                 101
 #define IDC_STATUS                      1001
 #define IDC_MULTIPLIER                  1002
 #define IDC_WINDOW_NAME                 1003
 #define IDC_TIMEOUT                     1004
+#define IDC_CHECK1                      1005
+#define IDC_ALTERNATIVE_FLY             1005
 
 // Next default values for new objects
 // 
@@ -14,7 +16,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        107
 #define _APS_NEXT_COMMAND_VALUE         40001
-#define _APS_NEXT_CONTROL_VALUE         1003
+#define _APS_NEXT_CONTROL_VALUE         1006
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

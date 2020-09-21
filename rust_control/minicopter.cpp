@@ -8,6 +8,7 @@ Minicopter copter;
 const char * defaultTimeout = "1";
 const char * defaultMultiplier = "5";
 const char * defaultWindowName = "Rust";
+bool alternativeFly = true;
 
 
 
@@ -35,15 +36,25 @@ INT_PTR CALLBACK dialogCopterProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lap
 
 	if (msg == WM_COMMAND)
 	{
-		if (HIWORD(wparam) == EN_CHANGE)
+		WORD code = HIWORD(wparam);
+		WORD control_id = LOWORD(wparam);
+
+		if (code == EN_CHANGE)
 		{
-			WORD control_id = LOWORD(wparam);
 			if (control_id == IDC_MULTIPLIER || control_id == IDC_WINDOW_NAME) {
 				copter.updateControls();
 				return 0;
 			}
 		}
+
+		if (control_id == IDC_ALTERNATIVE_FLY && code == BN_CLICKED) {
+			bool checked = IsDlgButtonChecked(hwnd, IDC_ALTERNATIVE_FLY);
+			alternativeFly = checked;
+			copter.updateControls();
+		}
 	}
+
+		
 
 
 	return 0;
@@ -85,6 +96,7 @@ void Minicopter::updateControls()
 	}
 
 	SetDlgItemText(app.copterHwnd, IDC_STATUS, text);
+	CheckDlgButton(app.copterHwnd, IDC_ALTERNATIVE_FLY, (UINT)(alternativeFly));
 }
 
 
@@ -164,36 +176,61 @@ int Minicopter::onKeyPress(WORD vk, bool isModified, bool keydown)
 		return 0;
 	}
 	
+	if (alternativeFly)
+	{
+		if (vk == KEY_A) {
+			move.left = keydown;
+			return 1;
+		}
 
-	if (vk == KEY_A) {
-		move.left = keydown;
-		return 1;
+		if (vk == KEY_D) {
+			move.right = keydown;
+			return 1;
+		}
+
+		if (vk == KEY_NUM8) {
+			move.up = keydown;
+			return 1;
+		}
+
+		if (vk == KEY_NUM5) {
+			move.down = keydown;
+			return 1;
+		}
+
+		if (vk == KEY_NUM4) {
+			keybd_event(KEY_A, NULL, KEYEVENTF_EXTENDEDKEY | (keydown ? 0 : KEYEVENTF_KEYUP), NULL);
+			return 1;
+		}
+
+		if (vk == KEY_NUM6) {
+			keybd_event(KEY_D, NULL, KEYEVENTF_EXTENDEDKEY | (keydown ? 0 : KEYEVENTF_KEYUP), NULL);
+			return 1;
+		}
+	}
+	else {
+		if (vk == KEY_NUM4) {
+			move.left = keydown;
+			return 1;
+		}
+
+		if (vk == KEY_NUM6) {
+			move.right = keydown;
+			return 1;
+		}
+
+		if (vk == KEY_NUM8) {
+			move.up = keydown;
+			return 1;
+		}
+
+		if (vk == KEY_NUM5) {
+			move.down = keydown;
+			return 1;
+		}
 	}
 
-	if (vk == KEY_D) {
-		move.right = keydown;
-		return 1;
-	}
-
-	if (vk == KEY_NUM8) {
-		move.up = keydown;
-		return 1;
-	}
-
-	if (vk == KEY_NUM5) {
-		move.down = keydown;
-		return 1;
-	}
-
-	if (vk == KEY_NUM4) {
-		keybd_event(KEY_A, NULL, KEYEVENTF_EXTENDEDKEY | (keydown ? 0 : KEYEVENTF_KEYUP), NULL);
-		return 1;
-	}
-
-	if (vk == KEY_NUM6) {
-		keybd_event(KEY_D, NULL, KEYEVENTF_EXTENDEDKEY | (keydown ? 0 : KEYEVENTF_KEYUP), NULL);
-		return 1;
-	}
+	
 
 	return 0;
 }
