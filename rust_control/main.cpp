@@ -1,6 +1,6 @@
 #include "main.h"
 
-
+#pragma comment(lib, "Winmm.lib")
 
 
 App app;
@@ -71,6 +71,7 @@ WinMain(
 )
 {
 	app.hInstance = hInstance;
+	timeBeginPeriod(1);
 
 	keyboardHook = SetWindowsHookEx(WH_KEYBOARD_LL, LowLevelKeyboardProc, hInstance, NULL);
 
